@@ -1,0 +1,61 @@
+# depslib dependency file v1.0
+1652232939 source:c:\users\pacug\desktop\programacioni\lavaderoautos\auto.c
+	"auto.h"
+	"marca.h"
+	"color.h"
+	"stdio.h"
+	"stdlib.h"
+	<string.h>
+	<ctype.h>
+
+1652209865 source:c:\users\pacug\desktop\programacioni\lavaderoautos\color.c
+	"color.h"
+	<string.h>
+
+1652233450 source:c:\users\pacug\desktop\programacioni\lavaderoautos\fecha.c
+	"fecha.h"
+
+1652230932 source:c:\users\pacug\desktop\programacioni\lavaderoautos\servicio.c
+	"servicio.h"
+
+1652233149 source:c:\users\pacug\desktop\programacioni\lavaderoautos\trabajo.c
+	"trabajo.h"
+	"auto.h"
+	"marca.h"
+	"servicio.h"
+	<stdio.h>
+	<stdlib.h>
+
+1652209911 source:c:\users\pacug\desktop\programacioni\lavaderoautos\marca.c
+	"marca.h"
+	"stdlib.h"
+	"stdio.h"
+	<string.h>
+
+1652209711 c:\users\pacug\desktop\programacioni\lavaderoautos\marca.h
+
+1652233071 source:c:\users\pacug\desktop\programacioni\lavaderoautos\main.c
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	"marca.h"
+	"color.h"
+	"servicio.h"
+	"auto.h"
+	"trabajo.h"
+
+1652209761 c:\users\pacug\desktop\programacioni\lavaderoautos\color.h
+
+1652230489 c:\users\pacug\desktop\programacioni\lavaderoautos\servicio.h
+
+1652230586 c:\users\pacug\desktop\programacioni\lavaderoautos\auto.h
+	"marca.h"
+	"color.h"
+
+1652216693 c:\users\pacug\desktop\programacioni\lavaderoautos\fecha.h
+
+1652231599 c:\users\pacug\desktop\programacioni\lavaderoautos\trabajo.h
+	"fecha.h"
+	"auto.h"
+	"servicio.h"
+
