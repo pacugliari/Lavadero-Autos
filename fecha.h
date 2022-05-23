@@ -14,3 +14,4 @@ typedef struct{
 #endif // FECHA_H_INCLUDED
 
 int validarFecha(eFecha fecha);
+int compararFechas(eFecha fecha1,eFecha fecha2);

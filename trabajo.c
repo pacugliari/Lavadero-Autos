@@ -35,7 +35,7 @@ int buscarTrabajoLibre (eTrabajo trabajos[],int tamT,int* pIndice){
 }
 
 
-int altaTrabajo (eTrabajo trabajos[],eColor colores[],eAuto autos[],eMarca marcas[],eServicio servicios[],int tamA,int tamS,int tamM,int tamT,int tamC,int* pId){
+int altaTrabajo (eTrabajo trabajos[],eColor colores[],eAuto autos[],eMarca marcas[],eServicio servicios[],eCliente clientes[],int tamCl,int tamA,int tamS,int tamM,int tamT,int tamC,int* pId){
     int todoOk = 0;
     int indice;
     int indiceAuto;
@@ -43,11 +43,11 @@ int altaTrabajo (eTrabajo trabajos[],eColor colores[],eAuto autos[],eMarca marca
     char patenteIngresada[8];
 
 
-    if(trabajos && servicios && autos && colores && tamC && tamT >0 && tamS >0 && tamA > 0 && tamM > 0 && marcas && pId){
+    if(trabajos && servicios && autos && colores && tamC && tamT >0 && tamS >0 && tamA > 0 && tamM > 0 && marcas && pId && clientes && tamCl>0){
         buscarTrabajoLibre (trabajos,tamT,&indice);
         if(indice != -1){
             //INGRESO DE DATOS
-            listarAutos(autos,tamA,marcas,tamM,colores,tamC);
+            listarAutos(autos,tamA,marcas,tamM,colores,tamC,clientes,tamCl);
             printf("Ingrese la patente  \n");
             gets(patenteIngresada);
 
@@ -106,7 +106,7 @@ int altaTrabajo (eTrabajo trabajos[],eColor colores[],eAuto autos[],eMarca marca
         printf("Error en los parametros del alta de trabajo\n");
     }
 
-    return todoOk = 1;
+    return todoOk;
 }
 
 
@@ -155,7 +155,11 @@ int listarTrabajos (eTrabajo trabajos[],int tamT,eAuto autos[],int tamA,eServici
 
 int hardcodearTrabajos (eTrabajo trabajos[],int tamT,int cantidad,int* pId){
     int todoOk = 0;
-    eTrabajo trabajosHard [] = {{30000,10000,20003,{10,5,2022},0}};
+    eTrabajo trabajosHard [] = {{30000,10000,20001,{22,5,2022},0},
+                                {30001,10001,20002,{22,5,2022},0},
+                                {30002,10002,20000,{13,6,2021},0},
+                                {30003,10003,20003,{19,9,2021},0},
+                                {30004,10004,20001,{16,5,2022},0}};
 
     if (trabajos && tamT && pId && cantidad > 0 && cantidad <= tamT){
         for(int i=0;i<cantidad;i++){
@@ -163,6 +167,165 @@ int hardcodearTrabajos (eTrabajo trabajos[],int tamT,int cantidad,int* pId){
             trabajos[i].id = (*pId);
             (*pId)++;
         }
+        todoOk = 1;
+    }
+    return todoOk;
+}
+
+
+int mostrarTrabajosPorAuto (eTrabajo trabajos[],eColor colores[],eAuto autos[],eMarca marcas[],eServicio servicios[],eCliente clientes[],int tamCl,int tamA,int tamS,int tamM,int tamT,int tamC){
+    int todoOk = 0;
+    int idAuto;
+    int hayTrabajos = 0;
+    char patenteAuto [10];
+
+    if(trabajos && servicios && autos && colores &&clientes && tamCl>0 && tamC && tamT >0 && tamS >0 && tamA > 0 && tamM > 0 && marcas ){
+
+        listarAutos(autos,tamA,marcas,tamM,colores,tamC,clientes,tamCl);
+        printf("Ingrese el ID del auto \n");
+        scanf("%d",&idAuto);
+        fflush(stdin);
+
+        while(!validarAuto(autos,tamA,idAuto)){
+                printf("Error en la ID del auto.Vuelva a ingresar \n");
+                scanf("%d",&idAuto);
+                fflush(stdin);
+        }
+
+        system("cls");
+        printf("\t     ***LISTADO DE TRABAJOS***\n");
+        printf("-------------------------------------------------------\n");
+        printf("ID\t   Patente\tServicio\tFecha\n");
+        printf("-------------------------------------------------------\n");
+        for(int i=0;i<tamT;i++){
+            if(trabajos[i].idAuto == idAuto && !trabajos[i].isEmpty){
+               mostrarTrabajo(trabajos[i],servicios,tamS,autos,tamA);
+               hayTrabajos = 1;
+            }
+        }
+        cargarDescripcionPatente(autos,tamA,idAuto,patenteAuto);
+        if(!hayTrabajos)
+            printf("No hay trabajos realizados para el auto con patente: %s \n",patenteAuto);
+
+        todoOk = 1;
+    }
+    return todoOk;
+}
+
+
+int mostrarImporteTrabajoDeAuto (eTrabajo trabajos[],eColor colores[],eAuto autos[],eMarca marcas[],eServicio servicios[],eCliente clientes[],int tamCl,int tamA,int tamS,int tamM,int tamT,int tamC){
+    int todoOk = 0;
+    int idAuto;
+    int hayTrabajos = 0;
+    char patenteAuto [10];
+    float sumaImportes = 0;
+    int indiceServicio;
+
+    if(trabajos && servicios && autos && colores && clientes && tamCl >0 && tamC && tamT >0 && tamS >0 && tamA > 0 && tamM > 0 && marcas ){
+
+        listarAutos(autos,tamA,marcas,tamM,colores,tamC,clientes,tamCl);
+        printf("Ingrese el ID del auto \n");
+        scanf("%d",&idAuto);
+        fflush(stdin);
+
+        while(!validarAuto(autos,tamA,idAuto)){
+                printf("Error en la ID del auto.Vuelva a ingresar \n");
+                scanf("%d",&idAuto);
+                fflush(stdin);
+        }
+
+        system("cls");
+        for(int i=0;i<tamT;i++){
+            if(trabajos[i].idAuto == idAuto && !trabajos[i].isEmpty){
+                buscarServicio(servicios,tamS,trabajos[i].idServicio,&indiceServicio);
+                sumaImportes += servicios[indiceServicio].precio;
+                hayTrabajos = 1;
+            }
+        }
+        cargarDescripcionPatente(autos,tamA,idAuto,patenteAuto);
+        if(!hayTrabajos)
+            printf("No hay trabajos realizados para el auto con patente: %s \n",patenteAuto);
+        else
+            printf("La suma de importes de los trabajos realizados para el auto con patente: %s es $%0.2f \n",patenteAuto,sumaImportes);
+
+        todoOk = 1;
+    }
+    return todoOk;
+}
+
+
+
+int mostrarTrabajosPorServicio (eTrabajo trabajos[],eColor colores[],eAuto autos[],eMarca marcas[],eServicio servicios[],eCliente clientes[],int tamCl,int tamA,int tamS,int tamM,int tamT,int tamC){
+    int todoOk = 0;
+    int idServicio;
+    int hayTrabajos = 0;
+    char descripcionServicio[20];
+
+    if(trabajos && servicios && autos && colores && tamC && tamT >0 && tamS >0 && tamA > 0 && tamM > 0 && marcas ){
+        listarServicios(servicios,tamS);
+        printf("Ingrese el ID del servicio \n");
+        scanf("%d",&idServicio);
+        fflush(stdin);
+
+        while(!validarServicio(servicios,tamS,idServicio)){
+            printf("Error en la ID del servicio.Vuelva a ingresar \n");
+            scanf("%d",&idServicio);
+            fflush(stdin);
+        }
+
+        system("cls");
+        printf("\t     ***LISTADO DE TRABAJOS***\n");
+        printf("-------------------------------------------------------\n");
+        printf("ID\t   Patente\tServicio\tFecha\n");
+        printf("-------------------------------------------------------\n");
+        for(int i=0;i<tamT;i++){
+            if(trabajos[i].idServicio == idServicio){
+                mostrarTrabajo(trabajos[i],servicios,tamS,autos,tamA);
+                hayTrabajos = 1;
+            }
+        }
+        cargarDescripcionServicio(servicios,tamS,idServicio,descripcionServicio);
+        if(!hayTrabajos)
+            printf("No hay trabajos para el servicio de %s \n",descripcionServicio);
+
+
+
+        todoOk = 1;
+    }
+    return todoOk;
+}
+
+
+int mostrarTrabajosPorFecha (eTrabajo trabajos[],eColor colores[],eAuto autos[],eMarca marcas[],eServicio servicios[],eCliente clientes[],int tamCl,int tamA,int tamS,int tamM,int tamT,int tamC){
+    int todoOk = 0;
+    eFecha fecha;
+    int hayTrabajos = 0;
+
+    if(trabajos && servicios && autos && colores && tamC && tamT >0 && tamS >0 && tamA > 0 && tamM > 0 && marcas ){
+        printf("Ingrese la fecha ej: XX/XX/XXXX: ");
+        scanf("%d/%d/%d",&fecha.dia,&fecha.mes,&fecha.anio);
+        fflush(stdin);
+
+        while(!validarFecha(fecha)){
+            printf("Error en la fecha.Ingrese la fecha ej: XX/XX/XXXX: ");
+            scanf("%d/%d/%d",&fecha.dia,&fecha.mes,&fecha.anio);
+            fflush(stdin);
+        }
+
+        system("cls");
+        printf("\t     ***LISTADO DE TRABAJOS***\n");
+        printf("-------------------------------------------------------\n");
+        printf("ID\t   Patente\tServicio\tFecha\n");
+        printf("-------------------------------------------------------\n");
+        for(int i=0;i<tamT;i++){
+            if(compararFechas(fecha,trabajos[i].fecha)){
+                mostrarTrabajo(trabajos[i],servicios,tamS,autos,tamA);
+                hayTrabajos=1;
+            }
+        }
+        if(!hayTrabajos)
+            printf("No hay trabajos para la fecha %d/%d/%d \n",fecha.dia,fecha.mes,fecha.anio);
+
         todoOk = 1;
     }
     return todoOk;

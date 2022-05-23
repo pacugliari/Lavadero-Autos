@@ -46,3 +46,13 @@ int validarFecha(eFecha fecha){
     return todoOk;
 
 }
+
+int compararFechas(eFecha fecha1,eFecha fecha2){
+    int sonIguales = 0;
+
+    if(fecha1.anio == fecha2.anio && fecha1.mes == fecha2.mes && fecha1.dia==fecha2.dia){
+        sonIguales = 1;
+    }
+
+    return sonIguales;
+}
